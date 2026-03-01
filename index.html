@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCB 智能信贷进件系统 - 渣打银行</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #007bff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gray-300);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 80px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-300);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: bold;
+        }
+        
+        .step-active .step-number {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+        
+        .step-active .step-label {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-section, .results-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+        
+        .slider-container {
+            position: relative;
+            margin-top: 10px;
+        }
+        
+        .slider-value {
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .product-card {
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.15);
+        }
+        
+        .product-card.selected {
+            border-color: var(--primary);
+            background: rgba(0, 86, 179, 0.05);
+        }
+        
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .product-badge {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .product-rate {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .product-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .detail-item {
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--gray-800);
+        }
+        
+        .product-features {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .feature-icon {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: #004494;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        .security-info {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+        
+        .security-info h4 {
+            margin-bottom: 8px;
+            color: var(--gray-800);
+        }
+        
+        footer {
+            background: var(--gray-800);
+            color: var(--gray-300);
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">SCB</div>
+                    <span>渣打银行智能信贷</span>
+                </div>
+                <div class="user-info">
+                    <span>Hello Dowsure! 👋</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-steps">
+                <div class="progress-step step-active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">填写信息</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">产品推荐</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">提交申请</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">审核结果</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-section fade-in">
+                <h2 class="section-title">
+                    <i>📋</i> 贷款需求信息
+                </h2>
+                
+                <div class="form-group">
+                    <label class="form-label">贷款金额</label>
+                    <input type="range" id="loanAmount" min="50000" max="5000000" step="10000" value="500000" class="form-control">
+                    <div class="slider-container">
+                        <span class="slider-value" id="amountValue">¥500,000</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">贷款期限</label>
+                    <select id="loanTerm" class="form-control">
+                        <option value="3">3个月</option>
+                        <option value="6">6个月</option>
+                        <option value="12" selected>12个月</option>
+                        <option value="24">24个月</option>
+                        <option value="36">36个月</option>
+                        <option value="60">60个月</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">还款方式</label>
+                    <select id="repaymentMethod" class="form-control">
+                        <option value="equal_principal_interest">等额本息（每月固定还款）</option>
+                        <option value="equal_principal">等额本金（逐月递减）</option>
+                        <option value="interest_only">先息后本（前期只还利息）</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">贷款用途</label>
+                    <select id="loanPurpose" class="form-control">
+                        <option value="business">企业经营</option>
+                        <option value="personal">个人消费</option>
+                        <option value="home">房屋装修</option>
+                        <option value="education">教育支出</option>
+                        <option value="other">其他用途</option>
+                    </select>
+                </div>
+                
+                <button id="calculateBtn" class="btn btn-primary" style="width: 100%;">
+                    🚀 智能匹配最优产品
+                </button>
+                
+                <div class="security-info">
+                    <h4>🔒 安全保障</h4>
+                    <p>您的个人信息将严格保密，仅用于贷款审批。所有数据传输均采用银行级加密保护。</p>
+                </div>
+            </div>
+            
+            <div class="results-section fade-in">
+                <h2 class="section-title">
+                    <i>💡</i> 智能产品推荐
+                </h2>
+                
+                <div id="recommendationResults">
+                    <div class="product-card" onclick="selectProduct('premium')">
+                        <div class="product-header">
+                            <div class="product-title">🥇 SCB-Premium 贷款</div>
+                            <div class="product-badge">最低利率</div>
+                        </div>
+                        <div class="product-rate">4.25%</div>
+                        <div class="product-details">
+                            <div class="detail-item">
+                                <div class="detail-label">月供</div>
+                                <div class="detail-value">¥28,950</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">总利息</div>
+                                <div class="detail-value">¥147,400</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">审批时间</div>
+                                <div class="detail-value">24小时</div>
+                            </div>
+                        </div>
+                        <div class="product-features">
+                            <ul class="feature-list">
+                                <li class="feature-item"><span class="feature-icon">✓</span> 无抵押要求</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 24小时内审批</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 在线申请，无需面签</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 可提前还款无违约金</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" onclick="selectProduct('standard')">
+                        <div class="product-header">
+                            <div class="product-title">🥈 SCB-Standard 贷款</div>
+                            <div class="product-badge">高额度</div>
+                        </div>
+                        <div class="product-rate">4.85%</div>
+                        <div class="product-details">
+                            <div class="detail-item">
+                                <div class="detail-label">月供</div>
+                                <div class="detail-value">¥31,200</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">总利息</div>
+                                <div class="detail-value">¥168,800</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">最高额度</div>
+                                <div class="detail-value">¥5,000,000</div>
+                            </div>
+                        </div>
+                        <div class="product-features">
+                            <ul class="feature-list">
+                                <li class="feature-item"><span class="feature-icon">✓</span> 最高500万额度</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 期限最长5年</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 可提前还款无违约金</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 专属客户经理服务</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" onclick="selectProduct('flexi')">
+                        <div class="product-header">
+                            <div class="product-title">🥉 SCB-Flexi 贷款</div>
+                            <div class="product-badge">灵活还款</div>
+                        </div>
+                        <div class="product-rate">5.20%</div>
+                        <div class="product-details">
+                            <div class="detail-item">
+                                <div class="detail-label">月供</div>
+                                <div class="detail-value">¥33,800</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">总利息</div>
+                                <div class="detail-value">¥197,600</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">还款方式</div>
+                                <div class="detail-value">多种可选</div>
+                            </div>
+                        </div>
+                        <div class="product-features">
+                            <ul class="feature-list">
+                                <li class="feature-item"><span class="feature-icon">✓</span> 多种还款方式可选</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 可随时调整还款计划</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 个性化定制服务</li>
+                                <li class="feature-item"><span class="feature-icon">✓</span> 灵活的提前还款政策</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="submitApplication()">
+                        📝 立即申请选中产品
+                    </button>
+                    <button class="btn btn-outline" onclick="contactSupport()">
+                        💬 联系客服咨询
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">
+                    &copy; 2026 渣打银行. 保留所有权利.
+                </div>
+                <div class="footer-links">
+                    <a href="#">隐私政策</a>
+                    <a href="#">服务条款</a>
+                    <a href="#">常见问题</a>
+                    <a href="#">联系我们</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 实时更新贷款金额显示
+        const loanAmountSlider = document.getElementById('loanAmount');
+        const amountValue = document.getElementById('amountValue');
+        
+        loanAmountSlider.addEventListener('input', function() {
+            const value = parseInt(this.value).toLocaleString();
+            amountValue.textContent = `¥${value}`;
+        });
+        
+        // 选择产品
+        let selectedProduct = null;
+        
+        function selectProduct(product) {
+            // 移除所有选中状态
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 添加选中状态
+            if (product) {
+                document.querySelector(`[onclick="selectProduct('${product}')"]`).classList.add('selected');
+                selectedProduct = product;
+            }
+        }
+        
+        // 计算推荐
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const amount = loanAmountSlider.value;
+            const term = document.getElementById('loanTerm').value;
+            const method = document.getElementById('repaymentMethod').value;
+            
+            // 这里可以添加实际的计算逻辑
+            alert(`正在为您匹配最适合的产品...\n贷款金额: ¥${parseInt(amount).toLocaleString()}\n期限: ${term}个月\n还款方式: ${method === 'equal_principal_interest' ? '等额本息' : method === 'equal_principal' ? '等额本金' : '先息后本'}`);
+            
+            // 模拟计算完成后的效果
+            document.querySelectorAll('.product-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                }, index * 200);
+            });
+        });
+        
+        // 提交申请
+        function submitApplication() {
+            if (!selectedProduct) {
+                alert('请先选择一个产品！');
+                return;
+            }
+            
+            const productName = selectedProduct === 'premium' ? 'SCB-Premium 贷款' : 
+                              selectedProduct === 'standard' ? 'SCB-Standard 贷款' : 'SCB-Flexi 贷款';
+            
+            alert(`✅ 申请已提交！\n\n您已成功申请：${productName}\n我们的客户经理将在24小时内联系您。\n\n感谢您选择渣打银行！`);
+        }
+        
+        // 联系客服
+        function contactSupport() {
+            alert('📞 客服热线：400-888-8888\n在线客服：点击右下角聊天图标\n工作时间：周一至周五 9:00-18:00');
+        }
+        
+        // 初始化第一个产品为选中状态
+        window.onload = function() {
+            selectProduct('premium');
+        };
+    </script>
+</body>
+</html>
